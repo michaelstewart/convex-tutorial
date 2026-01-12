@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../convex/_generated/api";
+import { useLiveQuery } from "@tanstack/react-db";
+import { messagesCollection } from "./main";
 
 // For demo purposes. In a real app, you'd have real user data.
 const NAME = getOrSetFakeName();
 
 export default function App() {
-  const messages = useQuery(api.chat.getMessages);
-  const sendMessage = useMutation(api.chat.sendMessage);
+  // Use TanStack DB live query instead of Convex useQuery
+  // Sort by updatedAt with nulls last (optimistic inserts have null updatedAt)
+  const { data: messages } = useLiveQuery((q) =>
+    q.from({ msg: messagesCollection }).orderBy(({ msg }) => msg.updatedAt, { nulls: "last" })
+  );
 
   const [newMessageText, setNewMessageText] = useState("");
 
@@ -27,10 +30,10 @@ export default function App() {
           Connected as <strong>{NAME}</strong>
         </p>
       </header>
-      {messages?.map((message) => (
+      {(messages ?? []).map((message) => (
         <article
-          key={message._id}
-          className={message.user === NAME ? "message-mine" : ""}
+          key={message.id}
+          className={`${message.user === NAME ? "message-mine" : ""} ${message.updatedAt === null ? "message-pending" : ""}`}
         >
           <div>{message.user}</div>
 
@@ -40,7 +43,15 @@ export default function App() {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          await sendMessage({ user: NAME, body: newMessageText });
+          // Optimistic insert: message appears instantly before server confirms.
+          // Set updatedAt to null; server will set the real timestamp.
+          // When sync returns server version, LWW keeps it (real timestamp > null).
+          messagesCollection.insert({
+            id: crypto.randomUUID(),
+            user: NAME,
+            body: newMessageText,
+            updatedAt: null,
+          });
           setNewMessageText("");
         }}
       >

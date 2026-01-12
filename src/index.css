@@ -233,6 +233,10 @@ button {
   justify-self: end;
 }
 
+.chat article.message-pending p {
+  opacity: 0.6;
+}
+
 .chat form {
   position: fixed;
   bottom: 8px;
