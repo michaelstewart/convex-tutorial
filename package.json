@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
-    "@michaelstewart/convex-tanstack-db-collection": "file:../..",
+    "@michaelstewart/convex-tanstack-db-collection": "^0.0.1",
     "@tanstack/db": "^0.5.18",
     "@tanstack/react-db": "^0.1.62",
     "convex": "1.31.3",
