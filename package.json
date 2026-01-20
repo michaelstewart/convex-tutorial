@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
-    "@michaelstewart/convex-tanstack-db-collection": "^0.0.1",
+    "@michaelstewart/convex-tanstack-db-collection": "^0.0.2",
     "@tanstack/db": "^0.5.18",
     "@tanstack/react-db": "^0.1.62",
     "convex": "1.31.3",
+    "prettier": "3.7.4",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "prettier": "3.7.4"
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@types/babel__core": "^7.20.0",
@@ -24,8 +24,8 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "npm-run-all2": "^8.0.0",
     "typescript": "~5.0.3",
-    "vite": "^6.4.1",
-    "npm-run-all2": "^8.0.0"
+    "vite": "^6.4.1"
   }
 }
